@@ -1,0 +1,28 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+            "label": "01 - Migration Add",
+            "type": "shell",
+            "command": "dotnet",
+            "args" : ["ef", "migrations", "add", "${input:migration_name}", "--project", "triedge-api", "-v"],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "02 - Migration Apply",
+            "type": "shell",
+            "command": "dotnet",
+            "args" : ["ef", "database", "update", "--project", "triedge-api", "-v"],
+            "problemMatcher": "$msCompile"
+        }
+	],
+    // ========== INPUTS ========================
+    "inputs": [
+    // ----- ef ------
+    {
+      "id": "migration_name",
+      "type": "promptString",
+      "description": "Migration Name"
+    }
+  ]
+}

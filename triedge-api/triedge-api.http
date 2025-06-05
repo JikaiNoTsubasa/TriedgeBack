@@ -1,0 +1,6 @@
+@triedge_api_HostAddress = http://localhost:5123
+
+GET {{triedge_api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
