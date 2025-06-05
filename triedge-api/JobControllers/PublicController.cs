@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using triedge_api.Global;
 using triedge_api.JobManagers;
+using triedge_api.JobModels;
 
 namespace triedge_api.JobControllers;
 
@@ -15,6 +16,6 @@ public class PublicController(BlogManager blogManager) : TriController
     [Route("api/public/blogs")]
     public IActionResult FetchPublicBlogs()
     {
-        return Return(new ApiResult() { HttpCode = 200, Content = blogManager.FetchPublicBlogs() });
+        return Return(new ApiResult() { HttpCode = 200, Content = blogManager.FetchPublicBlogs().Select(b => b.ToDTO()).ToList() });
     }
 }

@@ -5,12 +5,16 @@ namespace triedge_api.Database;
 
 public class TriContext(DbContextOptions<TriContext> options) : DbContext(options)
 {
+
     public DbSet<User> Users { get; set; }
     public DbSet<Blog> Blogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<User>().HasIndex(u => u.Login).IsUnique();
+        modelBuilder.Entity<User>().HasMany(u => u.Blogs).WithOne(b => b.Owner).HasForeignKey(b => b.OwnerId).OnDelete(DeleteBehavior.Restrict);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

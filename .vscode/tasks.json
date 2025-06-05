@@ -14,6 +14,13 @@
             "command": "dotnet",
             "args" : ["ef", "database", "update", "--project", "triedge-api", "-v"],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "03 - Clear Cache",
+            "type": "shell",
+            "command": "dotnet",
+            "args" : ["nuget", "locals", "all", "--clear"],
+            "problemMatcher": "$msCompile"
         }
 	],
     // ========== INPUTS ========================
