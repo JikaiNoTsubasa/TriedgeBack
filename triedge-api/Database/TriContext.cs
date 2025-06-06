@@ -15,6 +15,9 @@ public class TriContext(DbContextOptions<TriContext> options) : DbContext(option
 
         modelBuilder.Entity<User>().HasIndex(u => u.Login).IsUnique();
         modelBuilder.Entity<User>().HasMany(u => u.Blogs).WithOne(b => b.Owner).HasForeignKey(b => b.OwnerId).OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Blog>().HasIndex(b => b.Identifier).IsUnique();
+        modelBuilder.Entity<Blog>().HasIndex(b => b.Slug).IsUnique();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

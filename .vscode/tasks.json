@@ -16,7 +16,7 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "03 - Clear Cache",
+            "label": "03 - Clear Nuget Cache",
             "type": "shell",
             "command": "dotnet",
             "args" : ["nuget", "locals", "all", "--clear"],

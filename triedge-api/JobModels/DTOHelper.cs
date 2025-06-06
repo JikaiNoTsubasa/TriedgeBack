@@ -33,7 +33,8 @@ public static class DTOHelper
             Owner = blog.Owner.ToDTO(),
             CreatedAt = blog.CreatedAt,
             UpdatedAt = blog.UpdatedAt,
-            PublishedDate = blog.PublishedDate
+            PublishedDate = blog.PublishedDate,
+            Image = blog.Image
         };
     }
     #endregion
