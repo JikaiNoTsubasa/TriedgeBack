@@ -11,5 +11,7 @@ public class User : Entity
     public void SetPassword(string password) => Password = HashService.HashPassword(password);
 
     public List<Blog>? Blogs { get; set; }
+    public bool CanLogin { get; set; } = true;
+    public DateTime? LastConnection { get; set; }
 
 }

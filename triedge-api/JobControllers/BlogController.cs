@@ -1,4 +1,5 @@
 using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using triedge_api.Database.Models;
 using triedge_api.Global;
@@ -8,6 +9,7 @@ using triedge_api.JobModels.BlogModels;
 
 namespace triedge_api.JobControllers;
 
+[Authorize]
 public class BlogController(BlogManager blogManager) : TriController
 {
     protected BlogManager _blogManager = blogManager;

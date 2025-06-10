@@ -17,7 +17,8 @@ public static class DTOHelper
             Name = user.Name,
             Avatar = user.Avatar,
             CreatedAt = user.CreatedAt,
-            UpdatedAt = user.UpdatedAt
+            UpdatedAt = user.UpdatedAt,
+            CanLogin = user.CanLogin
         };
     }
     #endregion
