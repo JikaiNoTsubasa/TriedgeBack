@@ -30,6 +30,7 @@ public static class DTOHelper
             Id = blog.Id,
             Title = blog.Title,
             Content = blog.Content,
+            Slug = blog.Slug,
             Owner = blog.Owner.ToDTO(),
             CreatedAt = blog.CreatedAt,
             UpdatedAt = blog.UpdatedAt,

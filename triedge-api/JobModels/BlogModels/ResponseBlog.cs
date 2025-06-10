@@ -9,4 +9,5 @@ public record class ResponseBlog : ResponseEntity
     public ResponseUser Owner { get; set; } = null!;
     public DateTime? PublishedDate { get; set; }
     public string? Image { get; set; }
+    public string Slug { get; set; } = null!;
 }
