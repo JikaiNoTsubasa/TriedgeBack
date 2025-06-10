@@ -52,11 +52,13 @@ if (app.Environment.IsDevelopment())
 
 app.MapControllers();
 
+/*
 log.Info("Init data");
 using var scope = app.Services.CreateScope();
 var userManager = scope.ServiceProvider.GetRequiredService<UserManager>();
 log.Info("Init admin user");
 ProjectInit.InitAdminUser(userManager);
+*/
 
 app.Run();
 log.Info("Application started");
