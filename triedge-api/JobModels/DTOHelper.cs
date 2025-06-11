@@ -37,6 +37,7 @@ public static class DTOHelper
             UpdatedAt = blog.UpdatedAt,
             PublishedDate = blog.PublishedDate,
             Image = blog.Image,
+            Status = blog.Status,
             Categories = blog.Categories?.Select(c => c.ToDTO()).ToList()
         };
     }

@@ -21,6 +21,7 @@ public class TriContext(DbContextOptions<TriContext> options) : DbContext(option
         modelBuilder.Entity<Blog>().HasIndex(b => b.Identifier).IsUnique();
         modelBuilder.Entity<Blog>().HasIndex(b => b.Slug).IsUnique();
         modelBuilder.Entity<Blog>().HasMany(b => b.Categories).WithMany(c => c.Blogs);
+        modelBuilder.Entity<Blog>().Property(b => b.Image).HasDefaultValue("/images/default-blog-img.jpeg");
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

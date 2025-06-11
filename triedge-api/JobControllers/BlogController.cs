@@ -14,12 +14,21 @@ public class BlogController(BlogManager blogManager) : TriController
 {
     protected BlogManager _blogManager = blogManager;
 
+    #region Blog
+
+    [HttpGet]
+    [Route("api/myblogs")]
+    public IActionResult FetchMyBlogs()
+    {
+        return Return(new ApiResult() { HttpCode = StatusCodes.Status200OK, Content = _blogManager.FetchMyBlogs(_loggedUserId).Select(b => b.ToDTO()).ToList() });
+    }
+
     [HttpPost]
     [Route("api/blog")]
     public IActionResult CreateBlog([FromBody] RequestCreateBlog model)
     {
         Blog blog = _blogManager.CreateBlog(1, model.Title, model.Content, model.Image);
-        return Return(new ApiResult() { HttpCode = 200, Content = blog.ToDTO() });
+        return Return(new ApiResult() { HttpCode = StatusCodes.Status201Created, Content = blog.ToDTO() });
     }
 
     [HttpPatch]
@@ -27,6 +36,17 @@ public class BlogController(BlogManager blogManager) : TriController
     public IActionResult PublishBlog([FromRoute] long id)
     {
         Blog blog = _blogManager.PublishBlog(id);
-        return Return(new ApiResult() { HttpCode = 200, Content = blog.ToDTO() });
+        return Return(new ApiResult() { HttpCode = StatusCodes.Status200OK, Content = blog.ToDTO() });
     }
+
+    #endregion
+    #region Category
+    [HttpPost]
+    [Route("api/category")]
+    public IActionResult CreateCategory([FromBody] RequestCreateCategory model)
+    {
+        Category category = _blogManager.CreateCategory(model.Name);
+        return Return(new ApiResult() { HttpCode = StatusCodes.Status201Created, Content = category.ToDTO() });
+    }
+    #endregion
 }

@@ -1,3 +1,4 @@
+using triedge_api.Database.Models;
 using triedge_api.JobModels.UserModels;
 
 namespace triedge_api.JobModels.BlogModels;
@@ -11,4 +12,5 @@ public record class ResponseBlog : ResponseEntity
     public string? Image { get; set; }
     public string Slug { get; set; } = null!;
     public List<ResponseCategory>? Categories { get; set; }
+    public BlogStatus Status { get; set; }
 }

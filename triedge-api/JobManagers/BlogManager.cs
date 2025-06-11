@@ -6,6 +6,7 @@ using SBIDotnetUtils.Extensions;
 using System.Globalization;
 using System.Text;
 using log4net;
+using triedge_api.Exceptions;
 
 namespace triedge_api.JobManagers;
 
@@ -13,14 +14,27 @@ public class BlogManager(TriContext context) : TriManager(context)
 {
     private static readonly ILog log = LogManager.GetLogger(typeof(BlogManager));
 
-#region Blog
+    #region Blog
+
+    private IQueryable<Blog> GenerateBlogQuery() => _context.Blogs.Include(b => b.Owner).Include(b => b.Categories);
+
     public List<Blog> FetchPublicBlogs()
     {
-        return [.. _context.Blogs
-            .Include(b => b.Owner)
-            .Include(b => b.Categories)
+        return [.. GenerateBlogQuery()
             .Where(b => b.Status == BlogStatus.PUBLISHED)
             .OrderByDescending(b => b.PublishedDate)];
+    }
+
+    public Blog FetchBlogBySlug(string slug)
+    {
+        return GenerateBlogQuery()
+            .FirstOrDefault(b => b.Slug == slug) ?? throw new TriEntityNotFoundException($"Blog not found for slug {slug}");
+    }
+
+    public List<Blog> FetchMyBlogs(long userId)
+    {
+        return [.. GenerateBlogQuery()
+            .Where(b => b.OwnerId == userId)];
     }
 
     public Blog CreateBlog(long ownerId, string title, string content, string? image = null)
@@ -102,7 +116,7 @@ public class BlogManager(TriContext context) : TriManager(context)
 
     public List<Category> FetchCategories() => [.. _context.Categories];
 
-    public Category FetchCategoryById(long id) => _context.Categories.FirstOrDefault(c => c.Id == id) ?? throw new Exception($"Category not found for id {id}");
+    public Category FetchCategoryById(long id) => _context.Categories.FirstOrDefault(c => c.Id == id) ?? throw new TriEntityNotFoundException($"Category not found for id {id}");
 
     public Category UpdateCategory(long id, string name)
     {

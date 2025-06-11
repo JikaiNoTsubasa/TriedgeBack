@@ -1,6 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using triedge_api.Exceptions;
 
 namespace triedge_api.Global;
 
@@ -14,6 +15,7 @@ public class GlobalExceptionHandler : IExceptionHandler
             SyEntitiyNotFoundException => StatusCodes.Status404NotFound,
             SyBadRequest => StatusCodes.Status400BadRequest,
             SyException => StatusCodes.Status500InternalServerError,*/
+            TriEntityNotFoundException => StatusCodes.Status404NotFound,
             ArgumentException => StatusCodes.Status400BadRequest,
             UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
             _ => 500
