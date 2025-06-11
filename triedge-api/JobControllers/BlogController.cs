@@ -23,12 +23,27 @@ public class BlogController(BlogManager blogManager) : TriController
         return Return(new ApiResult() { HttpCode = StatusCodes.Status200OK, Content = _blogManager.FetchMyBlogs(_loggedUserId).Select(b => b.ToDTO()).ToList() });
     }
 
+    [HttpGet]
+    [Route("api/myblog/{id}")]
+    public IActionResult FetchMyBlogById([FromRoute] long id)
+    {
+        return Return(new ApiResult() { HttpCode = StatusCodes.Status200OK, Content = _blogManager.FetchMyBlogById(id, _loggedUserId).ToDTO() });
+    }
+
     [HttpPost]
     [Route("api/blog")]
     public IActionResult CreateBlog([FromBody] RequestCreateBlog model)
     {
         Blog blog = _blogManager.CreateBlog(1, model.Title, model.Content, model.Image);
         return Return(new ApiResult() { HttpCode = StatusCodes.Status201Created, Content = blog.ToDTO() });
+    }
+
+    [HttpPut]
+    [Route("api/myblog/{id}")]
+    public IActionResult UpdateMyBlog([FromRoute] long id, [FromBody] RequestUpdateBlog model)
+    {
+        Blog blog = _blogManager.UpdateMyBlog(id, _loggedUserId, model.Title, model.Content, model.Image);
+        return Return(new ApiResult() { HttpCode = StatusCodes.Status200OK, Content = blog.ToDTO() });
     }
 
     [HttpPatch]

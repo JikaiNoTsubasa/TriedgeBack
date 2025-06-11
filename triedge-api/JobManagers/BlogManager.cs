@@ -37,6 +37,23 @@ public class BlogManager(TriContext context) : TriManager(context)
             .Where(b => b.OwnerId == userId)];
     }
 
+    public Blog FetchMyBlogById(long id, long userId)
+    {
+        return GenerateBlogQuery()
+            .FirstOrDefault(b => b.Id == id && b.OwnerId == userId) ?? throw new TriEntityNotFoundException($"Blog not found for id {id} and user {userId}");
+    }
+
+    public Blog UpdateMyBlog(long id, long userId, string? title = null, string? content = null, string? image = null)
+    {
+        Blog blog = _context.Blogs.Include(b => b.Owner).FirstOrDefault(b => b.Id == id && b.OwnerId == userId) ?? throw new TriEntityNotFoundException($"Blog not found for id {id}");
+        blog.Title = title ?? blog.Title;
+        blog.Content = content ?? blog.Content;
+        blog.Image = image ?? blog.Image;
+        blog.MarkAsUpdated();
+        _context.SaveChanges();
+        return blog;
+    }
+
     public Blog CreateBlog(long ownerId, string title, string content, string? image = null)
     {
         User user = _context.Users.FirstOrDefault(u => u.Id == ownerId)!;
