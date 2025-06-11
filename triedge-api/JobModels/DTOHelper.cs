@@ -36,7 +36,19 @@ public static class DTOHelper
             CreatedAt = blog.CreatedAt,
             UpdatedAt = blog.UpdatedAt,
             PublishedDate = blog.PublishedDate,
-            Image = blog.Image
+            Image = blog.Image,
+            Categories = blog.Categories?.Select(c => c.ToDTO()).ToList()
+        };
+    }
+
+    public static ResponseCategory ToDTO(this Category category)
+    {
+        return new()
+        {
+            Id = category.Id,
+            Name = category.Name,
+            CreatedAt = category.CreatedAt,
+            UpdatedAt = category.UpdatedAt
         };
     }
     #endregion

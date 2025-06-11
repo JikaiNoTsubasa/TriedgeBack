@@ -12,10 +12,15 @@ namespace triedge_api.JobManagers;
 public class BlogManager(TriContext context) : TriManager(context)
 {
     private static readonly ILog log = LogManager.GetLogger(typeof(BlogManager));
-    
+
+#region Blog
     public List<Blog> FetchPublicBlogs()
     {
-        return [.. _context.Blogs.Include(b => b.Owner).Where(b => b.Status == BlogStatus.PUBLISHED)];
+        return [.. _context.Blogs
+            .Include(b => b.Owner)
+            .Include(b => b.Categories)
+            .Where(b => b.Status == BlogStatus.PUBLISHED)
+            .OrderByDescending(b => b.PublishedDate)];
     }
 
     public Blog CreateBlog(long ownerId, string title, string content, string? image = null)
@@ -79,4 +84,33 @@ public class BlogManager(TriContext context) : TriManager(context)
         }
         log.Info($"Indexed blog {id}");
     }
+
+    #endregion
+    #region Category
+
+    public Category CreateCategory(string name)
+    {
+        Category category = new()
+        {
+            Name = name
+        };
+        category.MarkAsCreated();
+        _context.Categories.Add(category);
+        _context.SaveChanges();
+        return category;
+    }
+
+    public List<Category> FetchCategories() => [.. _context.Categories];
+
+    public Category FetchCategoryById(long id) => _context.Categories.FirstOrDefault(c => c.Id == id) ?? throw new Exception($"Category not found for id {id}");
+
+    public Category UpdateCategory(long id, string name)
+    {
+        Category category = FetchCategoryById(id);
+        category.Name = name;
+        category.MarkAsUpdated();
+        _context.SaveChanges();
+        return category;
+    }
+    #endregion
 }

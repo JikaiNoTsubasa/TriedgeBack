@@ -8,6 +8,8 @@ public class TriContext(DbContextOptions<TriContext> options) : DbContext(option
 
     public DbSet<User> Users { get; set; }
     public DbSet<Blog> Blogs { get; set; }
+    public DbSet<Category> Categories { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -18,6 +20,7 @@ public class TriContext(DbContextOptions<TriContext> options) : DbContext(option
 
         modelBuilder.Entity<Blog>().HasIndex(b => b.Identifier).IsUnique();
         modelBuilder.Entity<Blog>().HasIndex(b => b.Slug).IsUnique();
+        modelBuilder.Entity<Blog>().HasMany(b => b.Categories).WithMany(c => c.Blogs);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

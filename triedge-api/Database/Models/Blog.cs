@@ -17,5 +17,6 @@ public class Blog : Entity
     public User Owner { get; set; } = null!;
     public DateTime? PublishedDate { get; set; }
     public string? Image { get; set; }
+    public List<Category>? Categories { get; set; }
 
 }

@@ -10,4 +10,5 @@ public record class ResponseBlog : ResponseEntity
     public DateTime? PublishedDate { get; set; }
     public string? Image { get; set; }
     public string Slug { get; set; } = null!;
+    public List<ResponseCategory>? Categories { get; set; }
 }
