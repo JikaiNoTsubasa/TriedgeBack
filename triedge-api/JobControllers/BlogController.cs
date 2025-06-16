@@ -34,7 +34,7 @@ public class BlogController(BlogManager blogManager) : TriController
     [Route("api/blog")]
     public IActionResult CreateBlog([FromBody] RequestCreateBlog model)
     {
-        Blog blog = _blogManager.CreateBlog(1, model.Title, model.Content, model.Image);
+        Blog blog = _blogManager.CreateBlog(_loggedUserId, model.Title, model.Content, model.Image, model.CategoryIds);
         return Return(new ApiResult() { HttpCode = StatusCodes.Status201Created, Content = blog.ToDTO() });
     }
 
@@ -42,7 +42,7 @@ public class BlogController(BlogManager blogManager) : TriController
     [Route("api/myblog/{id}")]
     public IActionResult UpdateMyBlog([FromRoute] long id, [FromBody] RequestUpdateBlog model)
     {
-        Blog blog = _blogManager.UpdateMyBlog(id, _loggedUserId, model.Title, model.Content, model.Image);
+        Blog blog = _blogManager.UpdateMyBlog(id, _loggedUserId, model.Title, model.Content, model.Image, model.CategoryIds);
         return Return(new ApiResult() { HttpCode = StatusCodes.Status200OK, Content = blog.ToDTO() });
     }
 

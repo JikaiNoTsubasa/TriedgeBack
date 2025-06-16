@@ -9,4 +9,5 @@ public record class RequestCreateBlog
     [Required]
     public string Content { get; set; } = null!;
     public string? Image { get; set; }
+    public List<long>? CategoryIds { get; set; }
 }

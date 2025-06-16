@@ -43,18 +43,24 @@ public class BlogManager(TriContext context) : TriManager(context)
             .FirstOrDefault(b => b.Id == id && b.OwnerId == userId) ?? throw new TriEntityNotFoundException($"Blog not found for id {id} and user {userId}");
     }
 
-    public Blog UpdateMyBlog(long id, long userId, string? title = null, string? content = null, string? image = null)
+    public Blog UpdateMyBlog(long id, long userId, string? title = null, string? content = null, string? image = null, List<long>? categoryIds = null)
     {
-        Blog blog = _context.Blogs.Include(b => b.Owner).FirstOrDefault(b => b.Id == id && b.OwnerId == userId) ?? throw new TriEntityNotFoundException($"Blog not found for id {id}");
+        Blog blog = _context.Blogs.Include(b => b.Owner).Include(b => b.Categories).FirstOrDefault(b => b.Id == id && b.OwnerId == userId) ?? throw new TriEntityNotFoundException($"Blog not found for id {id}");
         blog.Title = title ?? blog.Title;
         blog.Content = content ?? blog.Content;
         blog.Image = image ?? blog.Image;
+
+        if (categoryIds != null)
+        {
+            blog.Categories?.Clear();
+            blog.Categories = [.. _context.Categories.Where(c => categoryIds.Contains(c.Id))];
+        }
         blog.MarkAsUpdated();
         _context.SaveChanges();
         return blog;
     }
 
-    public Blog CreateBlog(long ownerId, string title, string content, string? image = null)
+    public Blog CreateBlog(long ownerId, string title, string content, string? image = null, List<long>? categoryIds = null)
     {
         User user = _context.Users.FirstOrDefault(u => u.Id == ownerId)!;
         Blog blog = new()
@@ -66,6 +72,9 @@ public class BlogManager(TriContext context) : TriManager(context)
             Identifier = Guid.NewGuid().ToString(),
             Slug = title.ToSlug(),
         };
+
+        if (categoryIds != null) blog.Categories = [.. _context.Categories.Where(c => categoryIds.Contains(c.Id))];
+        
         blog.MarkAsCreated();
         _context.Blogs.Add(blog);
         _context.SaveChanges();
