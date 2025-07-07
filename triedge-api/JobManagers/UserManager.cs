@@ -30,4 +30,13 @@ public class UserManager(TriContext context) : TriManager(context)
     public User FetchUserById(long id) => _context.Users.FirstOrDefault(u => u.Id == id) ?? throw new TriEntityNotFoundException($"User not found for id {id}");
 
     public User? FetchUserByLogin(string login) => _context.Users.FirstOrDefault(u => u.Login.Equals(login));
+
+    public User UpdateUserPassword(long id, string password)
+    {
+        User user = FetchUserById(id);
+        user.SetPassword(password);
+        user.MarkAsUpdated();
+        _context.SaveChanges();
+        return user;
+    }
 }

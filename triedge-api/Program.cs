@@ -91,5 +91,21 @@ log.Info("Init admin user");
 ProjectInit.InitAdminUser(userManager);
 */
 
+// Allow to see request body
+app.Use(async (context, next) =>
+{
+    if (context.Request.ContentLength > 0)
+    {
+        context.Request.EnableBuffering();
+        var url = context.Request.Path.Value;
+        var body = await new StreamReader(context.Request.Body).ReadToEndAsync();
+        Console.WriteLine($"Request Path: {url}");
+        Console.WriteLine($"Request Body: {body}");
+        context.Request.Body.Position = 0;
+    }
+    await next();
+});
+
+
 app.Run();
 log.Info("Application started");
