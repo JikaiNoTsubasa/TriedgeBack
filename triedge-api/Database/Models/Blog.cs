@@ -18,5 +18,6 @@ public class Blog : Entity
     public DateTime? PublishedDate { get; set; }
     public string? Image { get; set; }
     public List<Category>? Categories { get; set; }
+    public int Viewed { get; set; }
 
 }

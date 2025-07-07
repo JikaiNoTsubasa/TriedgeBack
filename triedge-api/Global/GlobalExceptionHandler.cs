@@ -16,6 +16,7 @@ public class GlobalExceptionHandler : IExceptionHandler
             SyBadRequest => StatusCodes.Status400BadRequest,
             SyException => StatusCodes.Status500InternalServerError,*/
             TriEntityNotFoundException => StatusCodes.Status404NotFound,
+            TriForbidden => StatusCodes.Status403Forbidden,
             ArgumentException => StatusCodes.Status400BadRequest,
             UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
             _ => 500

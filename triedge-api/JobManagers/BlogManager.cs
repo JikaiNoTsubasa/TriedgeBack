@@ -27,8 +27,11 @@ public class BlogManager(TriContext context) : TriManager(context)
 
     public Blog FetchBlogBySlug(string slug)
     {
-        return GenerateBlogQuery()
+        Blog blog = GenerateBlogQuery()
             .FirstOrDefault(b => b.Slug == slug) ?? throw new TriEntityNotFoundException($"Blog not found for slug {slug}");
+        blog.Viewed++;
+        _context.SaveChanges();
+        return blog;
     }
 
     public List<Blog> FetchMyBlogs(long userId)
@@ -39,8 +42,9 @@ public class BlogManager(TriContext context) : TriManager(context)
 
     public Blog FetchMyBlogById(long id, long userId)
     {
-        return GenerateBlogQuery()
+        Blog blog = GenerateBlogQuery()
             .FirstOrDefault(b => b.Id == id && b.OwnerId == userId) ?? throw new TriEntityNotFoundException($"Blog not found for id {id} and user {userId}");
+        return blog;
     }
 
     public Blog UpdateMyBlog(long id, long userId, string? title = null, string? content = null, string? image = null, List<long>? categoryIds = null)
@@ -74,7 +78,7 @@ public class BlogManager(TriContext context) : TriManager(context)
         };
 
         if (categoryIds != null) blog.Categories = [.. _context.Categories.Where(c => categoryIds.Contains(c.Id))];
-        
+
         blog.MarkAsCreated();
         _context.Blogs.Add(blog);
         _context.SaveChanges();
@@ -125,6 +129,14 @@ public class BlogManager(TriContext context) : TriManager(context)
         log.Info($"Indexed blog {id}");
     }
 
+    public void DeleteBlog(long id, long userId)
+    {
+        Blog blog = _context.Blogs.Include(b => b.Owner).FirstOrDefault(b => b.Id == id) ?? throw new TriEntityNotFoundException($"Blog not found for id {id}");
+        if (blog.OwnerId != userId) throw new TriForbidden($"Blog doesn't belong to user {userId}");
+        _context.Blogs.Remove(blog);
+        _context.SaveChanges();
+    }
+
     #endregion
     #region Category
 
@@ -153,4 +165,5 @@ public class BlogManager(TriContext context) : TriManager(context)
         return category;
     }
     #endregion
+    
 }

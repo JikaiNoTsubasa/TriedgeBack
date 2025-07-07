@@ -46,6 +46,14 @@ public class BlogController(BlogManager blogManager) : TriController
         return Return(new ApiResult() { HttpCode = StatusCodes.Status200OK, Content = blog.ToDTO() });
     }
 
+    [HttpDelete]
+    [Route("api/myblog/{id}")]
+    public IActionResult DeleteMyBlog([FromRoute] long id)
+    {
+        _blogManager.DeleteBlog(id, _loggedUserId);
+        return Return(new ApiResult() { HttpCode = StatusCodes.Status204NoContent, Content = null });
+    }
+
     [HttpPatch]
     [Route("api/blog/{id}/Publish")]
     public IActionResult PublishBlog([FromRoute] long id)

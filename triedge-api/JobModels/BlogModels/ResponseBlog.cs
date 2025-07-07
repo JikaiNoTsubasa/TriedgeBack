@@ -13,4 +13,5 @@ public record class ResponseBlog : ResponseEntity
     public string Slug { get; set; } = null!;
     public List<ResponseCategory>? Categories { get; set; }
     public BlogStatus Status { get; set; }
+    public int Viewed { get; set; }
 }

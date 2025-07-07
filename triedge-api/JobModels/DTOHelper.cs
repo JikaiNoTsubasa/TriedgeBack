@@ -38,7 +38,8 @@ public static class DTOHelper
             PublishedDate = blog.PublishedDate,
             Image = blog.Image,
             Status = blog.Status,
-            Categories = blog.Categories?.Select(c => c.ToDTO()).ToList()
+            Categories = blog.Categories?.Select(c => c.ToDTO()).ToList(),
+            Viewed = blog.Viewed
         };
     }
 
